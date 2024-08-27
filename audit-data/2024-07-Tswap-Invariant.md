@@ -1,6 +1,6 @@
 ---
 title: T-SWAP Audit - Invariants
-author: Tastukesi
+author: Alberto
 date: July 16, 2024
 header-includes:
   - \usepackage{titling}
@@ -46,7 +46,7 @@ Lead Auditors:
   - [HIGH](#high)
     - [\[H-1\] ``TswapPool::deposit`` is missing deadline check causing transaction to complete even after the deadline](#h-1-tswappooldeposit-is-missing-deadline-check-causing-transaction-to-complete-even-after-the-deadline)
     - [\[H-2\] Incorrect fee calculation in `TSwapPool::getInputAmountBasedOnOutput` causes protocol to take too many tokens, resulting in lost fees](#h-2-incorrect-fee-calculation-in-tswappoolgetinputamountbasedonoutput-causes-protocol-to-take-too-many-tokens-resulting-in-lost-fees)
-    - [\[H-2\] Lack of slippage protection in `TSwapPool::swapExactOutput`. Need a max value amount parameter. Causes users to potentially reveive way fewer tokens](#h-2-lack-of-slippage-protection-in-tswappoolswapexactoutput-need-a-max-value-amount-parameter-causes-users-to-potentially-reveive-way-fewer-tokens)
+    - [\[H-3\] Lack of slippage protection in `TSwapPool::swapExactOutput`. Need a max value amount parameter. Causes users to potentially reveive way fewer tokens](#h-3-lack-of-slippage-protection-in-tswappoolswapexactoutput-need-a-max-value-amount-parameter-causes-users-to-potentially-reveive-way-fewer-tokens)
     - [\[H-4\] The function `TSwapPool::sellPoolTokens` mismatches input and output tokens causing a wrong call: users to receive the incorrect amount of tokens](#h-4-the-function-tswappoolsellpooltokens-mismatches-input-and-output-tokens-causing-a-wrong-call-users-to-receive-the-incorrect-amount-of-tokens)
     - [\[H-5\] In `TSwapPool::_swap` the extra tokens fiven to users after every `swapCount` breaks the protocol invariant of `x*y=k`](#h-5-in-tswappool_swap-the-extra-tokens-fiven-to-users-after-every-swapcount-breaks-the-protocol-invariant-of-xyk)
   - [MEDIUM](#medium)
@@ -67,7 +67,7 @@ Protocol does X, Y, Z
 
 # Disclaimer
 
-The YOUR_NAME_HERE team makes all effort to find as many vulnerabilities in the code in the given time period, but holds no responsibilities for the findings provided in this document. A security audit by the team is not an endorsement of the underlying business or product. The audit was time-boxed and the review of the code was solely on the security aspects of the Solidity implementation of the contracts.
+A security audit by the author is not an endorsement of the underlying business or product. The audit was time-boxed and the review of the code was solely on the security aspects of the Solidity implementation of the contracts.
 
 # Risk Classification
 
@@ -199,7 +199,7 @@ function testFlawedSwapExactOutput() public {
 
 
 
-### [H-2] Lack of slippage protection in `TSwapPool::swapExactOutput`. Need a max value amount parameter. Causes users to potentially reveive way fewer tokens
+### [H-3] Lack of slippage protection in `TSwapPool::swapExactOutput`. Need a max value amount parameter. Causes users to potentially reveive way fewer tokens
 
 **Description** The `swapExactOutput` function does not include any sort of slippage protection. (Search in SOLODIT)
 This function is similar to what is done in `TSwapPool::swapWxactInput` where the function specifies a `minOutputAmount`, the `swapExactOutput` function should specify a `maxInputAmoint`.
